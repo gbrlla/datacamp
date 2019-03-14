@@ -6,7 +6,6 @@ library(tidyverse)
 library(gapminder)
 library(ggplot2)
 
-#teste
 
 # Summarize medianGdpPercap within each continent within each year: by_year_continent
 by_year_continent <- gapminder %>%
@@ -18,4 +17,3 @@ ggplot(by_year_continent, aes(x = year, y = medianGdpPercap, color = continent))
   geom_point() +
   expand_limits(y = 0)
 
-#testesssssssssssss
