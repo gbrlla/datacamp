@@ -86,3 +86,5 @@ ggplot(gapminder_1952, aes(x = continent, y = gdpPercap)) +
   geom_boxplot() +
   scale_y_log10() +
   ggtitle("Comparing GDP per capita across continents")
+
+
