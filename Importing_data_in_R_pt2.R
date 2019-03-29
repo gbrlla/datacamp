@@ -172,4 +172,143 @@ raw_content <- content(resp, "raw")
   # Print content of resp
   content(resp)
 
+  # JSON and API
+  
+  # Load the jsonlite package
+  install.packages("jsonlite")
+  library(jsonlite)
+  
+  # wine_json is a JSON
+  wine_json <- '{"name":"Chateau Migraine", "year":1997, "alcohol_pct":12.4, "color":"red", "awarded":false}'
+  
+  
+  # Convert wine_json into a list: wine
+  wine <- fromJSON(wine_json)
+  
+  
+  # Definition of quandl_url
+  quandl_url <- "https://www.quandl.com/api/v3/datasets/WIKI/FB/data.json?auth_token=i83asDsiWUUyfoypkgMz"
+  
+  # Import Quandl data: quandl_data
+  quandl_data <- fromJSON(quandl_url)
+  
+  # Print structure of quandl_data
+  str(quandl_data)
 
+  # Definition of the URLs
+  url_sw4 <- "http://www.omdbapi.com/?apikey=72bc447a&i=tt0076759&r=json"
+  url_sw3 <- "http://www.omdbapi.com/?apikey=72bc447a&i=tt0121766&r=json"
+  
+  # Import two URLs with fromJSON(): sw4 and sw3
+  sw4 <- fromJSON(url_sw4)
+  sw3 <- fromJSON(url_sw3)
+  
+  # Print out the Title element of both lists
+  sw4$Title
+  sw3$Title
+  
+  # Is the release year of sw4 later than sw3?
+  sw4$Year > sw3$Year
+    
+  # install.packages("tibble")
+  # library(tibble)
+  # teste <- as_tibble(sw4)
+  # teste
+  # str(teste)
+  
+  # Challenge 1
+  json1 <- '[1, 2, 3, 4, 5, 6]'
+  fromJSON(json1)
+  
+  # Challenge 2
+  json2 <- '{"a": [1, 2, 3], "b": [4, 5, 6]}'
+  fromJSON(json2)
+  
+  # URL pointing to the .csv file
+  url_csv <- "http://s3.amazonaws.com/assets.datacamp.com/production/course_1478/datasets/water.csv"
+  
+  # Import the .csv file located at url_csv
+  water <- read.csv(url_csv, stringsAsFactors = FALSE)
+  
+  # Convert the data file according to the requirements
+  water_json <- toJSON(water)
+  
+  # Print out water_json
+  water_json
+  
+  # Convert mtcars to a pretty JSON: pretty_json
+  pretty_json <- toJSON(mtcars, pretty = TRUE)
+  
+  # Print pretty_json
+  pretty_json
+  
+  # Minify pretty_json: mini_json
+  mini_json <- minify(pretty_json)
+  
+  # Print mini_json
+  mini_json
+  
+  # Load the haven package
+  library(haven)
+  
+  # Import sales.sas7bdat: sales
+  sales <- read_sas("sales.sas7bdat")
+  
+  # Display the structure of sales
+  str(sales)
+  
+  # Import person.sav: traits
+  traits <- read_sav("person.sav")
+  
+  # Summarize traits
+  summary(traits)
+  
+  
+  # Print out a subset
+  subset(traits, Extroversion > 40 & Agreeableness > 40)
+  
+  # Import SPSS data from the URL: work
+  work <- read_sav("http://s3.amazonaws.com/assets.datacamp.com/production/course_1478/datasets/employee.sav")
+  
+  # Display summary of work$GENDER
+  summary(work$GENDER)
+  
+  # Convert work$GENDER to a factor
+  work$GENDER <- as_factor(work$GENDER)
+  
+  # Display summary of work$GENDER again
+  summary(work$GENDER)
+  
+  # Load the foreign package
+  library(foreign)
+  
+  # Import florida.dta and name the resulting data frame florida
+  florida <- read.dta("florida.dta")
+  
+  # Check tail() of florida
+  tail(florida)
+  
+  # foreign is already loaded
+  
+  # Specify the file path using file.path(): path
+  path <- file.path("worldbank", "edequality.dta")
+  
+  # Create and print structure of edu_equal_1
+  edu_equal_1 <- read.dta(path)
+  str(edu_equal_1)
+  
+  # Create and print structure of edu_equal_2
+  edu_equal_2 <- read.dta(path, convert.factors = FALSE)
+  str(edu_equal_2)
+  
+  # Create and print structure of edu_equal_3
+  edu_equal_3 <- read.dta(path, convert.underscore = TRUE)
+  str(edu_equal_3)
+  
+  # foreign is already loaded
+  
+  # Import international.sav as a data frame: demo
+  demo <- read.spss("international.sav", to.data.frame = TRUE)
+  
+  # Create boxplot of gdp variable of demo
+  boxplot(demo$gdp)
