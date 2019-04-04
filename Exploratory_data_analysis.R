@@ -139,3 +139,151 @@ common_cyl %>%
   ggtitle("hahahahaha")
 
 
+# Measures of center
+
+# Create dataset of 2007 data
+gap2007 <- filter(gapminder, year == 2007)
+
+# Compute groupwise mean and median lifeExp
+gap2007 %>%
+  group_by(continent) %>%
+  summarize(mean(lifeExp),
+            median(lifeExp))
+
+# Generate box plots of lifeExp for each continent
+gap2007 %>%
+  ggplot(aes(x = continent, y = lifeExp)) +
+  geom_boxplot()
+
+
+# Compute groupwise measures of spread
+gap2007 %>%
+  group_by(continent) %>%
+  summarize(sd(lifeExp),
+            IQR(lifeExp),
+            n())
+
+# Generate overlaid density plots
+gap2007 %>%
+  ggplot(aes(x = lifeExp, fill = continent)) +
+  geom_density(alpha = 0.3)
+
+gapminder$continent
+
+# Compute stats for lifeExp in Americas
+gap2007 %>%
+  filter(continent == "Americas") %>%
+  summarize(mean(lifeExp),
+            sd(lifeExp))
+
+# Compute stats for population
+gap2007 %>%
+  summarize(median(pop),
+            IQR(pop))
+
+# Create density plot of old variable
+gap2007 %>%
+  ggplot(aes(x = pop)) +
+  geom_density()
+
+# Transform the skewed pop variable
+gap2007 <- gap2007 %>%
+  mutate(log_pop = log(pop))
+
+# Create density plot of new variable
+gap2007 %>%
+  ggplot(aes(x = log_pop)) +
+  geom_density()
+
+
+# Filter for Asia, add column indicating outliers
+gap_asia <- gap2007 %>%
+  filter(continent == "Asia") %>%
+  mutate(is_outlier = lifeExp < 50)
+
+# Remove outliers, create box plot of lifeExp
+gap_asia %>% 
+  filter(!is_outlier) %>%
+  ggplot(aes(x = 1, y = lifeExp)) +
+  geom_boxplot()
+
+# Load packages
+library(openintro)
+library(ggplot2)
+library(dplyr)
+
+glimpse(email)
+
+# Compute summary statistics
+email %>%
+  group_by(spam) %>%
+  summarize(median(num_char),
+            IQR(num_char))
+
+# Create plot
+email %>%
+  mutate(log_num_char = log(num_char)) %>%
+  ggplot(aes(x = spam, y = log_num_char)) +
+  geom_boxplot()
+
+# Compute center and spread for exclaim_mess by spam
+email %>%
+  group_by(spam) %>%
+  summarize(median(exclaim_mess),
+            IQR(exclaim_mess))
+
+# Create plot for spam and exclaim_mess
+email %>%
+  mutate(log_exclaim_mess = log(exclaim_mess + 0.01)) %>%
+  ggplot(aes(x = log_exclaim_mess)) +
+  geom_histogram() +
+  facet_wrap(~ spam)
+
+# Alternative plot: side-by-side box plots
+email %>%
+  mutate(log_exclaim_mess = log(exclaim_mess + 0.01)) %>%
+  ggplot(aes(x = 1, y = log_exclaim_mess)) +
+  geom_boxplot() +
+  facet_wrap(~ spam)
+
+# Alternative plot: Overlaid density plots
+email %>%
+  mutate(log_exclaim_mess = log(exclaim_mess + .01)) %>%
+  ggplot(aes(x = log_exclaim_mess, fill = spam)) +
+  geom_density(alpha = 0.3)
+
+# Create plot of proportion of spam by image
+email %>%
+  mutate(has_image = image > 0) %>%
+  ggplot(aes(x = has_image, fill = spam)) +
+  geom_bar(position = "fill")
+
+# Test if images count as attachments
+sum(email$image > email$attach)
+
+# "Within non-spam emails, is the typical 
+# length of emails shorter for those that were sent to multiple people?"
+email %>%
+  filter(spam == "not-spam") %>%
+  group_by(to_multiple) %>%
+  summarize(median(num_char))
+
+# Question 1
+email %>%
+  filter(dollar > 0) %>%
+  group_by(spam) %>%
+  summarize(median(dollar))
+
+# Question 2
+email %>%
+  filter(dollar > 10) %>%
+  ggplot(aes(x = spam)) +
+  geom_bar()
+
+# Reorder levels
+email$number <- factor(email$number, levels = c("none", "small", "big"))
+
+# Construct plot of number
+ggplot(email, aes(x = number)) +
+  geom_bar() +
+  facet_wrap(~ spam)
