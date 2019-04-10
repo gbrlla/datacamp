@@ -128,3 +128,36 @@ ggplot(data = Galton_women, aes(x = mother, y = height)) +
   geom_point() + 
   geom_abline(slope = 1, intercept = 0) + 
   geom_smooth(method = "lm", se = FALSE)
+
+# Linear model for weight as a function of height
+lm(wgt ~ hgt, data = bdims)
+
+# Linear model for SLG as a function of OBP
+lm(SLG ~ OBP, data = mlbBat10)
+
+# Log-linear model for body weight as a function of brain weight
+lm(log(BodyWt) ~ log(BrainWt), data = mammals)
+
+str(mammals)
+
+# Show the coefficients
+mod <- lm(wgt ~ hgt, data = bdims)
+coef(mod)
+# Show the full output
+summary(mod)
+
+# Mean of weights equal to mean of fitted values?
+mean(fitted.values(mod)) == mean(bdims$wgt)
+
+str(bdims)
+# Mean of the residuals
+mean(residuals(mod))
+
+# Load broom
+library(broom)
+
+# Create bdims_tidy
+bdims_tidy <- augment(mod)
+
+# Glimpse the resulting data frame
+glimpse(bdims_tidy)
