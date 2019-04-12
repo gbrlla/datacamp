@@ -161,3 +161,16 @@ bdims_tidy <- augment(mod)
 
 # Glimpse the resulting data frame
 glimpse(bdims_tidy)
+
+# Print ben
+ben
+
+# Predict the weight of ben
+predict(mod, newdata = ben)
+
+# Add the line to the scatterplot
+ggplot(data = bdims, aes(x = hgt, y = wgt)) + 
+  geom_point() + 
+  geom_abline(data = coefs, 
+              aes(intercept = `(Intercept)`, slope = hgt),  
+              color = "dodgerblue")
