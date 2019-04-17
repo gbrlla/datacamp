@@ -205,3 +205,29 @@ mod %>%
   augment() %>%
   arrange(desc(.hat)) %>%
   head(6)
+
+# Rank influential points
+mod %>%
+  augment() %>%
+  arrange(desc(.cooksd)) %>%
+  head()
+
+# Create nontrivial_players
+nontrivial_players <- mlbBat10 %>%
+  filter(AB >= 10, OBP < 0.5)
+
+# Fit model to new data
+mod_cleaner <- lm(SLG ~ OBP, data = nontrivial_players)
+
+# View model summary
+summary(mod_cleaner)
+
+# Visualize new model
+ggplot(data = nontrivial_players, aes(x = OBP, y = SLG)) +
+  geom_point() + 
+  geom_smooth(method = "lm")
+
+# Rank high leverage points
+mod %>% augment() %>%
+arrange(desc(.hat), (.cooksd)) %>%
+head(6)
