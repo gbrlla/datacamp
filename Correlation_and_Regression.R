@@ -174,3 +174,34 @@ ggplot(data = bdims, aes(x = hgt, y = wgt)) +
   geom_abline(data = coefs, 
               aes(intercept = `(Intercept)`, slope = hgt),  
               color = "dodgerblue")
+
+# View summary of model
+summary(mod)
+
+# Compute the mean of the residuals
+mean(residuals(mod))
+
+# Compute RMSE
+sqrt(sum(residuals(mod)^2) / df.residual(mod))
+
+# View model summary
+summary(mod)
+
+# Compute R-squared
+bdims_tidy %>%
+  summarize(var_y = var(wgt), var_e = var(.resid)) %>%
+  mutate(R_squared = 1-(var_e/var_y))
+
+# Compute SSE for null model
+mod_null %>%
+  summarize(SSE = var(.resid))
+
+# Compute SSE for regression model
+mod_hgt %>%
+  summarize(SSE = var(.resid))
+
+# Rank points of high leverage
+mod %>%
+  augment() %>%
+  arrange(desc(.hat)) %>%
+  head(6)
