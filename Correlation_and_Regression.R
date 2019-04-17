@@ -231,3 +231,5 @@ ggplot(data = nontrivial_players, aes(x = OBP, y = SLG)) +
 mod %>% augment() %>%
 arrange(desc(.hat), (.cooksd)) %>%
 head(6)
+
+###
