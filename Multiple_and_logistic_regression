@@ -1,0 +1,58 @@
+### adicionar o conteudo que está no notebook - sobre o primeiro cap
+
+
+# R-squared vs. adjusted R-squared
+# Two common measures of how well a model fits to data are R2 (the coefficient of determination) 
+# and the adjusted R2. The former measures the percentage of the variability in the response 
+# variable that is explained by the model. To compute this, we define
+# R2=1−SSESST,
+# where SSE and SST are the sum of the squared residuals, and the total sum of the squares, 
+# respectively. One issue with this measure is that the SSE can only decrease as new variable
+# are added to the model, while the SST depends only on the response variable and therefore is
+# not affected by changes to the model. This means that you can increase R2 by adding any 
+# additional variable to your model—even random noise.
+# 
+# The adjusted R2 includes a term that penalizes a model for each additional explanatory 
+# variable (where p is the number of explanatory variables).
+# R2adj=1−SSESST⋅n−1n−p−1
+
+
+
+# Use summary() to compute R2 and adjusted R2 on the model object called mod.
+summary(mod)
+
+
+# Use mutate() and rnorm() to add a new variable called noise to the mario_kart
+# data set that consists of random noise. Save the new dataframe as mario_kart_noisy.
+mario_kart_noisy <- mario_kart %>%
+  mutate(noise = rnorm(nrow(mario_kart)))
+
+
+# Use lm() to fit a model that includes wheels, cond, and the random noise term.
+mod2 <- lm(totalPr ~ wheels + cond + noise, data = mario_kart_noisy)
+
+# Use summary() to compute R2 and adjusted R2 on the new model object. Did the value 
+# of R2 increase? What about adjusted R2?
+summary(mod2)
+
+
+# Prediction
+# Once we have fit a regression model, we can use it to make predictions for unseen 
+# observations or retrieve the fitted values. Here, we explore two methods for doing the latter.
+# 
+# A traditional way to return the fitted values (i.e. the y^'s) is to run the predict() 
+# function on the model object. This will return a vector of the fitted values. Note that 
+# predict() will take an optional newdata argument that will allow you to make predictions 
+# for observations that are not in the original data.
+# 
+# A newer alternative is the augment() function from the broom package, which returns 
+# a data.frame with the response varible (y), the relevant explanatory variables (the x's), 
+# the fitted value (y^) and some information about the residuals (e). augment() will also 
+# take a newdata argument that allows you to make predictions.
+
+# Compute the fitted values of the model as a vector using predict().
+predict(mod)
+
+# Compute the fitted values of the model as one column in a data.frame using augment().
+augment(mod)
+
