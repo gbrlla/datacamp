@@ -188,3 +188,4 @@ augment(mod)
 lm(totalPr ~ duration + cond + cond:duration, data = mario_kart)
 
 
+#
