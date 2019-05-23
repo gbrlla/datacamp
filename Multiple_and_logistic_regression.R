@@ -188,4 +188,53 @@ augment(mod)
 lm(totalPr ~ duration + cond + cond:duration, data = mario_kart)
 
 
-#
+#Visualizing interaction models
+#Interaction allows the slope of the regression line in each group to vary. In this case, 
+#this means that the relationship between the final price and the length of the auction is 
+#moderated by the condition of each item.
+
+#Interaction models are easy to visualize in the data space with ggplot2 because they have 
+#the same coefficients as if the models were fit independently to each group defined by the 
+#level of the categorical variable. In this case, new and used MarioKarts each get their own 
+#regression line. To see this, we can set an aesthetic (e.g. color) to the categorical variable, 
+#and then add a geom_smooth() layer to overlay the regression line for each color.
+
+#The dataset mario_kart is already loaded in your workspace.
+
+#Use the color aesthetic and the geom_smooth() function to plot the interaction model between 
+#duration and condition in the data space. Make sure you set the method and se arguments of geom_smooth().
+
+# interaction plot
+ggplot(mario_kart, aes(y = totalPr, x = duration, color = cond)) + 
+  geom_point() + 
+  geom_smooth(method = "lm", se = FALSE)
+
+#Simpson's paradox in action
+#A mild version of Simpson's paradox can be observed in the MarioKart auction data. 
+#Consider the relationship between the final auction price and the length of the auction.
+#It seems reasonable to assume that longer auctions would result in higher prices, since—other 
+#things being equal—a longer auction gives more bidders more time to see the auction and bid on the item.
+
+#However, a simple linear regression model reveals the opposite: longer auctions are associated 
+#with lower final prices. The problem is that all other things are not equal. In this case, the 
+#new MarioKarts—which people pay a premium for—were mostly sold in one-day auctions, while a 
+#plurality of the used MarioKarts were sold in the standard seven-day auctions.
+
+#Our simple linear regression model is misleading, in that it suggests a negative relationship 
+#between final auction price and duration. However, for the used MarioKarts, the relationship is positive.
+
+#The object slr is already defined for you.
+#Fit a simple linear regression model for final auction price (totalPr) as a function of duration (duration).
+#Use aes() to add a color aesthetic that's mapped to the condition variable to the slr object, which is the plot shown at right.
+
+slr <- ggplot(mario_kart, aes(y = totalPr, x = duration)) + 
+  geom_point() + 
+  geom_smooth(method = "lm", se = 0)
+
+# model with one slope
+lm(totalPr ~ duration, data = mario_kart)
+
+# plot with two slopes
+slr + aes(color = cond)
+
+
