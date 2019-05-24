@@ -237,4 +237,61 @@ lm(totalPr ~ duration, data = mario_kart)
 # plot with two slopes
 slr + aes(color = cond)
 
+#Fitting a MLR model
+#In terms of the R code, fitting a multiple linear regression model is easy: simply add 
+#variables to the model formula you specify in the lm() command.
+
+#In a parallel slopes model, we had two explanatory variables: one was numeric and one was categorical. 
+#Here, we will allow both explanatory variables to be numeric.
+
+# Fit the model using duration and startPr
+lm(totalPr ~ duration + startPr, data = mario_kart)
+
+#Tiling the plane
+#One method for visualizing a multiple linear regression model is to create a heatmap of the fitted 
+#values in the plane defined by the two explanatory variables. This heatmap will illustrate how the 
+#model output changes over different combinations of the explanatory variables.
+
+#This is a multistep process:
+#First, create a grid of the possible pairs of values of the explanatory variables. The grid 
+#should be over the actual range of the data present in each variable. We've done this for 
+#you and stored the result as a data frame called grid.
+#Use augment() with the newdata argument to find the y^'s corresponding to the values in grid.
+#Add these to the data_space plot by using the fill aesthetic and geom_tile().
+
+#The model object mod is already in your workspace.
+
+#Use augment() to create a data.frame that contains the values the model outputs for each row of grid.
+#Use geom_tile to illustrate these predicted values over the data_space plot. Use the fill aesthetic and set alpha = 0.5.
+# add predictions to grid
+price_hats <- augment(mod, newdata = grid)
+head(price_hats)
+# tile the plane
+data_space + 
+  geom_tile(data = price_hats, aes(fill = .fitted), alpha = 0.5)
+
+
+#Models in 3D
+#An alternative way to visualize a multiple regression model with two numeric explanatory variables is as a plane in three dimensions. This is possible in R using the plotly package.
+
+#We have created three objects that you will need:
+
+#x: a vector of unique values of duration
+#y: a vector of unique values of startPr
+#plane: a matrix of the fitted values across all combinations of x and y
+#Much like ggplot(), the plot_ly() function will allow you to create a plot object with variables mapped 
+#to x, y, and z aesthetics. The add_markers() function is similar to geom_point() in that it allows you to add points to your 3D plot.
+
+#Note that plot_ly uses the pipe (%>%) operator to chain commands together.
+#Run the plot_ly command to draw 3D scatterplot for totalPr as a function of duration and startPr 
+#by mapping the z variable to the response and the x and y variables to the explanatory variables. 
+#Duration should be on the x-axis and starting price should be on the y-axis.
+#Use add_surface() to draw a plane through the cloud of points by setting z = ~plane.
+# draw the 3D scatterplot
+p <- plot_ly(data = mario_kart, z = ~totalPr, x = ~duration, y = ~startPr, opacity = 0.6) %>%
+  add_markers() 
+  
+# draw the plane
+p %>%
+  add_surface(x = ~x, y = ~y, z = ~plane, showscale = FALSE)
 
